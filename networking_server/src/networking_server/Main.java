@@ -8,6 +8,10 @@ import java.io.OutputStream;
 import java.lang.ClassNotFoundException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.validator.routines.UrlValidator;
 
 /**
  * This class implements java Socket server
@@ -20,7 +24,9 @@ public class Main {
     private static ServerSocket server;
     //socket server port on which it will listen
     private static int port = 4000;
-    
+	String URL = new String();
+	String inmessage;	
+        
     public static void main(String args[]) throws IOException, ClassNotFoundException{
         //create the socket server object
         server = new ServerSocket(port);
@@ -44,4 +50,18 @@ public class Main {
         socket.close();
         System.out.println("session closed");
      }    
+    
+    private void validateMessage(String inmessage) {
+		String pattern = "GET(.*)";
+		Pattern r = Pattern.compile(pattern);
+		Matcher m = r.matcher(inmessage);
+		if (m.find()) {
+			validateURL(m.group(1));
+		}
+	}
+	
+	private boolean validateURL(String url) {
+		UrlValidator defaultValidator = new UrlValidator();
+		return defaultValidator.isValid(url);
+	}
 }

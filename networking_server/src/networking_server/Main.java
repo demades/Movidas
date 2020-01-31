@@ -10,7 +10,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.validator.routines.UrlValidator;
 
 /**
@@ -41,6 +40,7 @@ public class Main {
         while(true){           
             String line = buffReader.readLine();    // reads a line of text            
             System.out.println(line);
+            validateMessage(line);
             if (line.equals("BYE")) {
             	break;
             }            
@@ -51,16 +51,19 @@ public class Main {
         System.out.println("session closed");
      }    
     
-    private void validateMessage(String inmessage) {
+    private static void validateMessage(String line) {
 		String pattern = "GET(.*)";
 		Pattern r = Pattern.compile(pattern);
-		Matcher m = r.matcher(inmessage);
+		Matcher m = r.matcher(line);
 		if (m.find()) {
 			validateURL(m.group(1));
+		}else {
+			System.out.println("not valid");
 		}
+			
 	}
 	
-	private boolean validateURL(String url) {
+	private static boolean validateURL(String url) {
 		UrlValidator defaultValidator = new UrlValidator();
 		return defaultValidator.isValid(url);
 	}

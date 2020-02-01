@@ -52,7 +52,7 @@ public class Main {
      }    
     
     private static void validateMessage(String line) {
-		String pattern = "GET(.*)";
+		String pattern = "GET:(.*)";
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(line);
 		if (m.find()) {

@@ -10,6 +10,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import org.apache.commons.validator.routines.UrlValidator;
 
 /**
@@ -56,15 +59,22 @@ public class Main {
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(line);
 		if (m.find()) {
-			validateURL(m.group(1));
+			//validateURL(m.group(1));
+			boolean  urlValidation = (validateURL(m.group(1)));
+			if (urlValidation) {
+				System.out.println("URL is valid " + m.group(1).toString());
+				HttpGetDownloadFileExample.main(m.group(1).toString());
+			}else {
+				System.err.println("URL is NOT valid");
+			}
 		}else {
-			System.out.println("not valid");
+			System.err.println("not valid");
 		}
 			
 	}
 	
 	private static boolean validateURL(String url) {
-		UrlValidator defaultValidator = new UrlValidator();
+		UrlValidator defaultValidator = new UrlValidator();		
 		return defaultValidator.isValid(url);
 	}
 }

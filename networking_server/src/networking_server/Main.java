@@ -1,18 +1,16 @@
 package networking_server;
 
-import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import org.apache.commons.validator.routines.UrlValidator;
 
 /**
@@ -34,16 +32,22 @@ public class Main {
         server = new ServerSocket(port);
         System.out.println("Listening for connections");
         Socket socket = server.accept();
-        OutputStream output = socket.getOutputStream();
+        ObjectOutputStream  output = new ObjectOutputStream(socket.getOutputStream());
         String client = socket.getRemoteSocketAddress().toString();
-        InputStream input = socket.getInputStream();
+        ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
         System.out.println("Client connected from " + client);
-        output.write("ACCEPT".getBytes());
-        BufferedReader buffReader = new BufferedReader(new InputStreamReader(input));
+        output.writeObject("ACCEPT");
         while(true){           
-            String line = buffReader.readLine();    // reads a line of text            
+            String line = input.readObject().toString();            
             System.out.println(line);
             validateMessage(line);
+            File f = new File("file");
+            if(f.exists() && !f.isDirectory()) {
+            	sendFile(f.getAbsolutePath());
+            	System.out.println("File exists " + f.getAbsolutePath());
+            }else {
+            	System.out.println("File not exists " + f.getAbsolutePath());
+            }
             if (line.equals("BYE")) {
             	break;
             }            
@@ -76,5 +80,21 @@ public class Main {
 	private static boolean validateURL(String url) {
 		UrlValidator defaultValidator = new UrlValidator();		
 		return defaultValidator.isValid(url);
+	}
+	
+	private static void sendFile(String file) throws IOException {
+		Socket c = new Socket("localhost",5000); 
+		DataOutputStream dos = new DataOutputStream(c.getOutputStream());
+		FileInputStream fis = new FileInputStream(file);
+		byte[] buffer = new byte[4096];		
+		while (fis.read(buffer) > 0) {
+			dos.write(buffer);						
+		}
+		System.out.println("file transfered");
+		File filep = new File("file");
+		filep.delete();
+		System.out.println("file removed on server side");
+		fis.close();
+		dos.close();	
 	}
 }

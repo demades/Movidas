@@ -26,9 +26,11 @@ public class HttpGetDownloadFileExample {
 	            // Create the file channel to save file
 	            FileOutputStream fosForDownloadedFile = new FileOutputStream("file");
 	            fileChannelForDownloadedFile = fosForDownloadedFile.getChannel();
-	 
+	            System.out.println("file created");
+
 	            // Save the body of the HTTP response to local file
 	            fileChannelForDownloadedFile.transferFrom(readableChannelForHttpResponseBody, 0, Long.MAX_VALUE);
+	            System.out.println("file saved");
 	 
 	        } catch (IOException ioException) {
 	            System.out.println("IOException occurred while contacting server.");

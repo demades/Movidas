@@ -20,16 +20,9 @@ import org.apache.commons.validator.routines.UrlValidator;
  * Initial : https://www.journaldev.com/741/java-socket-programming-server-client & https://systembash.com/a-simple-java-udp-server-and-udp-client/
  */
 public class Main {
-    
-    //static ServerSocket variable
-    private static ServerSocket server;
-    //socket server port on which it will listen
-    private static int port = 4000;
-	String URL = new String();
-	String inmessage;	
         
     public static void main(String args[]) throws IOException, ClassNotFoundException{
-        DatagramSocket serverSocket = new DatagramSocket(9876);
+        DatagramSocket serverSocket = new DatagramSocket(6500);
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];
         while(true)

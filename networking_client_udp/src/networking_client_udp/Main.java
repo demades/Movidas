@@ -3,9 +3,9 @@ package networking_client_udp;
 import java.io.*;
 import java.net.*;
 
-class UDPClient
-{
-   public static void Main(String args[]) throws Exception
+public class Main {
+	
+   public static void main(String args[]) throws Exception
    {
       BufferedReader inFromUser =
          new BufferedReader(new InputStreamReader(System.in));
@@ -15,7 +15,7 @@ class UDPClient
       byte[] receiveData = new byte[1024];
       String sentence = inFromUser.readLine();
       sendData = sentence.getBytes();
-      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 6500);
       clientSocket.send(sendPacket);
       DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
       clientSocket.receive(receivePacket);
